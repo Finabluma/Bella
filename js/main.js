@@ -51,7 +51,48 @@ function moveImages(e) {
     const { offsetX, offsetY, target } = e;
     const { clientWidth, clientHeight } = target;
 
-    console.log(offsetX, offsetY, clientHeight, clientWidth);
+    // console.log(offsetX, offsetY, clientHeight, clientWidth);
+
+    // get 0 0 in the center
+    const xPos = (offsetX / clientWidth) - 0.5;
+    const yPos = (offsetY / clientHeight) - 0.5;
+
+    const leftImages = gsap.utils.toArray('.hg__left .hg__image');
+    const rightImages = gsap.utils.toArray('.hg__right .hg__image');
+
+    const modifier = (index) => index * 1.2 * 0.5;
+
+    // move left three images
+    leftImages.forEach((image, index) => {
+        gsap.to(image, {
+            duration: 1.2,
+            x: xPos * 20 * modifier(index),
+            y: yPos * 30 * modifier(index),
+            rotationY: xPos * 40,
+            rotationX: yPos * 10,
+            ease: 'Power3.out'
+        })
+    });
+
+    // move right images
+    rightImages.forEach((image, index) => {
+        gsap.to(image, {
+            duration: 1.2,
+            x: xPos * 20 * modifier(index),
+            y: -yPos * 30 * modifier(index),
+            rotationX: yPos * 40,
+            rotationY: xPos * 10,
+            ease: 'Power3.out'
+        })
+    });
+
+    // decor_circle
+    gsap.to('.decor__circle', {
+        duration: 1.7,
+        x: 100 * xPos,
+        y: 120 * yPos,
+        ease: 'Power3.out'
+    })
 }
 
 function init() {
