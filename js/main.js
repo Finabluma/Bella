@@ -95,8 +95,9 @@ function moveImages(e) {
     })
 }
 
+const sections = document.querySelectorAll('.rg__column');
+
 function initHoverReveal() {
-    const sections = document.querySelectorAll('.rg__column');
 
     sections.forEach(section => {
         // get components for animation
@@ -154,12 +155,31 @@ function createHoverReveal(e) {
     return tl;
 }
 
+function resetProps(elements) {
+    console.log(elements);
+
+    // stop all tweens
+    gsap.killTweensOf('*');
+    if (elements.length) {
+        elements.forEach(el => {
+            el && gsap.set(el, { clearProps: 'all' })
+        })
+    }
+}
+
 function init() {
     initNavigation();
     initHeaderTilt();
 
     // Create a media condition that targets viewports at least 768px wide
     const mediaQuery = window.matchMedia('(min-width: 768px)')
+
+    // Register event listener
+    mediaQuery.addListener(handleSizeChange);
+
+    // Initial check
+    handleSizeChange(mediaQuery);
+
 
     function handleSizeChange(e) {
         if (e.matches) {
@@ -168,16 +188,16 @@ function init() {
             initHoverReveal();
         } else {
             console.log('we\'re\ on mobile');
+
+            // remove eventlistener from all sections.
+            sections.forEach(section => {
+                section.removeEventListener('mouseenter', createHoverReveal);
+                section.removeEventListener('mouseleave', createHoverReveal);
+                const { imageBlock, mask, text, textCopy, textMask, textP, image } = section;
+                resetProps([imageBlock, mask, text, textCopy, textMask, textP, image]);
+            });
         }
-    }
-
-    // Register event listener
-    mediaQuery.addListener(handleSizeChange);
-
-    // Initial check
-    handleSizeChange(mediaQuery); 
-
-    
+    } 
 }
 
 window.addEventListener('load', function () {
