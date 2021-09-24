@@ -1,1 +1,1 @@
-Mastering Greensock animations - Workshop
+Improving GSAP
