@@ -95,9 +95,33 @@ function moveImages(e) {
     })
 }
 
+function initHoverReveal() {
+    const sections = document.querySelectorAll('.rg__column');
+
+    sections.forEach(section => {
+
+        // get components for animation
+        const imageBlock = section.querySelector('.rg__image');
+        const mask = section.querySelector('.rg__image--mask');
+
+        // reset the image position
+        gsap.set(imageBlock, { yPercent: -101 });
+        gsap.set(mask, { yPercent: 100 })
+
+        // add eventlisteners to each sections
+        section.addEventListener('mouseenter', createHoverReveal);
+        section.addEventListener('mouseleave', createHoverReveal)
+    });
+}
+
+function createHoverReveal(e) {
+    console.log(e.type)
+}
+
 function init() {
     initNavigation();
     initHeaderTilt();
+    initHoverReveal();
 }
 
 window.addEventListener('load', function () {
