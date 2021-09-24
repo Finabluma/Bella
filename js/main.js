@@ -102,6 +102,9 @@ function initHoverReveal() {
         // get components for animation
         section.imageBlock = section.querySelector('.rg__image');
         section.mask = section.querySelector('.rg__image--mask');
+        section.text = section.querySelector('.rg__text');
+        // section.textHeight = section.querySelector('.rg__text--copy').clientHeight;
+        section.textCopy = section.querySelector('.rg__text--copy');
 
         // reset the image position
         gsap.set(section.imageBlock, { yPercent: -101 });
@@ -113,10 +116,13 @@ function initHoverReveal() {
     });
 }
 
+function getTextHeight(textCopy) {
+    return textCopy.clientHeight
+}
+
 function createHoverReveal(e) {
     // console.log(e.type)
-
-    const { imageBlock, mask } = e.target;
+    const { imageBlock, mask, text, textCopy } = e.target;
 
     let tl = gsap.timeline({
         defaults: {
@@ -127,9 +133,13 @@ function createHoverReveal(e) {
 
     if (e.type === 'mouseenter') {
         tl.to([imageBlock, mask], { yPercent: 0 })
+            .to(text, {
+                y: () => -getTextHeight(textCopy) / 2
+            }, 0)
     } else if (e.type === 'mouseleave') {
         tl.to(mask, { yPercent: 0 })
             .to(imageBlock, { yPercent: -101 }, 0)
+            .to(text, { y: 0 }, 0)
     }
 
     return tl;
