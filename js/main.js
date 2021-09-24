@@ -157,7 +157,27 @@ function createHoverReveal(e) {
 function init() {
     initNavigation();
     initHeaderTilt();
-    initHoverReveal();
+
+    // Create a media condition that targets viewports at least 768px wide
+    const mediaQuery = window.matchMedia('(min-width: 768px)')
+
+    function handleSizeChange(e) {
+        if (e.matches) {
+            // Then log the following message to the console
+            console.log('Media Query Matched!')
+            initHoverReveal();
+        } else {
+            console.log('we\'re\ on mobile');
+        }
+    }
+
+    // Register event listener
+    mediaQuery.addListener(handleSizeChange);
+
+    // Initial check
+    handleSizeChange(mediaQuery); 
+
+    
 }
 
 window.addEventListener('load', function () {
