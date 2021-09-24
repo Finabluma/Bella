@@ -101,14 +101,18 @@ function initHoverReveal() {
     sections.forEach(section => {
         // get components for animation
         section.imageBlock = section.querySelector('.rg__image');
+        section.image = section.querySelector('.rg__image img');
         section.mask = section.querySelector('.rg__image--mask');
         section.text = section.querySelector('.rg__text');
         // section.textHeight = section.querySelector('.rg__text--copy').clientHeight;
         section.textCopy = section.querySelector('.rg__text--copy');
+        section.textMask = section.querySelector('.rg__text--mask');
+        section.textP = section.querySelector('.rg__text--copy p');
 
         // reset the image position
-        gsap.set(section.imageBlock, { yPercent: -101 });
-        gsap.set(section.mask, { yPercent: 100 })
+        gsap.set([section.imageBlock, section.textMask], { yPercent: -101 });
+        gsap.set([section.mask, section.textP], { yPercent: 100 })
+        gsap.set(section.image, { scale: 1.2 })
 
         // add eventlisteners to each sections
         section.addEventListener('mouseenter', createHoverReveal);
@@ -122,7 +126,7 @@ function getTextHeight(textCopy) {
 
 function createHoverReveal(e) {
     // console.log(e.type)
-    const { imageBlock, mask, text, textCopy } = e.target;
+    const { imageBlock, mask, text, textCopy, textMask, textP, image } = e.target;
 
     let tl = gsap.timeline({
         defaults: {
@@ -132,14 +136,19 @@ function createHoverReveal(e) {
     })
 
     if (e.type === 'mouseenter') {
-        tl.to([imageBlock, mask], { yPercent: 0 })
+        tl.to([imageBlock, mask, textMask, textP], {
+            yPercent: 0
+        })
             .to(text, {
                 y: () => -getTextHeight(textCopy) / 2
             }, 0)
+            .to(image, { duration: 1.1, scale: 1 }, 0)
+
     } else if (e.type === 'mouseleave') {
-        tl.to(mask, { yPercent: 0 })
-            .to(imageBlock, { yPercent: -101 }, 0)
+        tl.to([mask, textP], { yPercent: 100 })
+            .to([imageBlock, textMask], { yPercent: -101 }, 0)
             .to(text, { y: 0 }, 0)
+            .to(image, { duration: 1.1, scale: 1.2 }, 0)
     }
 
     return tl;
