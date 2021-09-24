@@ -38,13 +38,25 @@ function initNavigation() {
         },
         onEnter: ({ direction }) => { navAnimation(direction) },
         onLeaveBack: ({ direction }) => { navAnimation(direction) },
-        markers: true
+        //markers: true
     })
 
 }
 
+function initHeaderTilt() {
+    document.querySelector('header').addEventListener('mousemove', moveImages);
+}
+
+function moveImages(e) {
+    const { offsetX, offsetY, target } = e;
+    const { clientWidth, clientHeight } = target;
+
+    console.log(offsetX, offsetY, clientHeight, clientWidth);
+}
+
 function init() {
-    initNavigation()
+    initNavigation();
+    initHeaderTilt();
 }
 
 window.addEventListener('load', function () {
